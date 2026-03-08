@@ -32,9 +32,53 @@ const Player = (mark_temp) => {
 };
 const player1 = Player("X");
 const player2 = Player("O");
+const player1Element = document.getElementById("p1");
+const player2Element = document.getElementById("p2");
+const nextBtn = document.querySelector("#next-btn");
+
+nextBtn.addEventListener("click", () =>{
+    Game.start();
+});
+
+const DisplayController = (() => {
+    const cells = document.querySelectorAll(".cell");
+
+    cells.forEach((cell)=> {
+        cell.addEventListener("click", () => {
+            const index = Number(cell.dataset.index);
+            Game.playRound(index);
+        });
+    });
+
+    const renderBoard = () => {
+        const board = Gameboard.getBoard();
+        cells.forEach((cell, index) => {
+            cell.textContent = board[index] || "";
+            cell.classList.remove("winner");
+        });
+    };
+
+    const renderWinningCells = (cellsIndex) => {
+        cellsIndex.forEach(winningCellIndex =>{
+            cells[winningCellIndex].classList.add("winner");
+        })
+    };
+
+    const renderScoreboard = () => {
+        const scoreboard = document.querySelector(".scoreboard");
+        scoreboard.textContent = `${player1.getWinCount()}:${player2.getWinCount()}`
+    };
+
+    return {renderBoard, renderScoreboard, renderWinningCells};
+})();
 
 //Game Function
 const Game = (function(){
+    let currentPlayer = player1;
+    player1Element.classList.add("current")
+    let round = 1;
+    let gameOver = false;
+
     let gameCount = 0;
     const winCombos = [
             [0,1,2], //straight horizontal
@@ -70,63 +114,66 @@ const Game = (function(){
             const [a,b,c] = combo;
 
             if(board[a]!== undefined && board[a]===board[b] && board[b]===board[c]){
+                DisplayController.renderWinningCells([a,b,c])
                 return true;
             };
         };
         return false;
     };
 
-    const start = () =>{
-        let round = 1
-        let hasWinner = false;
-        const maxRound = 9;
-        while(round<=maxRound){
-            //if round == odd number, player 1 move, else player 2 move
-            let index;
-            if(!(round%2===0)){
-                console.log(`player 1 move`);
-                //Prompt and validate player move (need to change method later)
-                index = validatePromptMove();
-                //mark cell
-                Gameboard.markCell(player1.getMark(),index);
-                //check win
-                const winner = checkWin();
-                if(winner){
-                    console.log(`Player 1 wins!`);
-                    hasWinner = true;
-                    player1.addWinCount();
-                    break;
-                };
-            } else{
-                console.log(`player 2 move`);
-                //Prompt and validate player move (need to change method later)
-                index = validatePromptMove();
-                //mark cell
-                Gameboard.markCell(player2.getMark(),index);
-                //check win
-                const winner = checkWin();
-                if(winner){
-                    console.log(`Player 2 wins!`);
-                    hasWinner = true;
-                    player2.addWinCount();
-                    break;
-                };
-            };
-            
-            
-            round++; 
-            console.log(Gameboard.getBoard());
-        };
-        if(!hasWinner){
-            console.log(`It's a draw!`)
+    const switchPlayer = () => {
+        currentPlayer = currentPlayer === player1 ? player2 : player1;
+
+        if(currentPlayer === player1){
+            player1Element.classList.add("current")
+            player2Element.classList.remove("current")
+        }else{
+            player2Element.classList.add("current")
+            player1Element.classList.remove("current")
         }
+    }
+
+    const playRound = (index) => {
+        if ( gameOver ){
+            return;
+        }
+
+        if ( Gameboard.getBoard()[index] !== undefined ){
+            return;
+        }
+
+        Gameboard.markCell(currentPlayer.getMark(), index)
+
+        DisplayController.renderBoard();
+
+        if( checkWin() ){
+            gameOver = true;
+            currentPlayer.addWinCount();
+            DisplayController.renderScoreboard();
+            return
+        }
+
+        if(round === 9){
+            gameOver=true;
+            return;
+        }
+
+        round++;
+        switchPlayer();
+    }
+
+    const start = () =>{
+        Gameboard.resetBoard();
+        currentPlayer = player1;
+        round = 1;
+        gameOver = false
+        DisplayController.renderBoard();
     };
     
     return {
-        start, promptMove
+        start, playRound
     };
 })()
 
 
-// Game.start();
-
+Game.start();

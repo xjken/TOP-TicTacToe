@@ -15,6 +15,9 @@ body{
 .header > * {
     font-size: 2.5rem;
 }
+.current{
+    background-color: aqua;
+}
 .gameboard-container{
     border: 4px solid;
     height: 606px;
@@ -27,4 +30,10 @@ body{
     height: 200px;
     width: 200px;
     border: 1px solid;
+    font-size: 8rem;
+    align-content: center;
+    text-align: center;
+}
+.winner {
+    background-color: chartreuse;
 }
