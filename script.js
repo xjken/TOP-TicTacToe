@@ -8,11 +8,7 @@ const Gameboard = (function(){
 
     const resetBoard = () =>{board.fill(undefined);};
 
-    return{
-        getBoard, 
-        markCell,
-        resetBoard
-    };
+    return{ getBoard, markCell, resetBoard};
 })()
 
 //Player factory function
@@ -30,6 +26,7 @@ const Player = (mark_temp) => {
         getMark, addWinCount, getWinCount
     };
 };
+
 const player1 = Player("X");
 const player2 = Player("O");
 const player1Element = document.getElementById("p1");
@@ -91,22 +88,10 @@ const Game = (function(){
             [2,4,6]
         ];
 
-    // const promptMove = () =>{
-    //     const index = prompt(`Where to mark
-    //             [0][1][2]
-    //             [3][4][5]
-    //             [6][7][8]
-    //         `)
-    //     return index;
-    // };
-
-    // const validatePromptMove = () => {
-    //     let index = promptMove();
-    //     while(!(Gameboard.getBoard()[index]===undefined)){
-    //         index = promptMove();
-    //     }
-    //     return index;
-    // };
+    const updateCurrentPlayerUI = () => {
+        player1Element.classList.toggle("current", currentPlayer === player1);
+        player2Element.classList.toggle("current", currentPlayer === player2);
+    };
 
     const checkWin = () =>{
         const board = Gameboard.getBoard();
@@ -123,14 +108,7 @@ const Game = (function(){
 
     const switchPlayer = () => {
         currentPlayer = currentPlayer === player1 ? player2 : player1;
-
-        if(currentPlayer === player1){
-            player1Element.classList.add("current")
-            player2Element.classList.remove("current")
-        }else{
-            player2Element.classList.add("current")
-            player1Element.classList.remove("current")
-        }
+        updateCurrentPlayerUI();
     }
 
     const playRound = (index) => {
@@ -163,13 +141,11 @@ const Game = (function(){
     }
 
     const start = () =>{
-        player1Element.classList.remove("current")
-        player2Element.classList.remove("current")
         Gameboard.resetBoard();
         currentPlayer = player1;
-        player1Element.classList.add("current")
         round = 1;
         gameOver = false
+        updateCurrentPlayerUI();
         DisplayController.renderBoard();
     };
     
