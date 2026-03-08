@@ -91,22 +91,22 @@ const Game = (function(){
             [2,4,6]
         ];
 
-    const promptMove = () =>{
-        const index = prompt(`Where to mark
-                [0][1][2]
-                [3][4][5]
-                [6][7][8]
-            `)
-        return index;
-    };
+    // const promptMove = () =>{
+    //     const index = prompt(`Where to mark
+    //             [0][1][2]
+    //             [3][4][5]
+    //             [6][7][8]
+    //         `)
+    //     return index;
+    // };
 
-    const validatePromptMove = () => {
-        let index = promptMove();
-        while(!(Gameboard.getBoard()[index]===undefined)){
-            index = promptMove();
-        }
-        return index;
-    };
+    // const validatePromptMove = () => {
+    //     let index = promptMove();
+    //     while(!(Gameboard.getBoard()[index]===undefined)){
+    //         index = promptMove();
+    //     }
+    //     return index;
+    // };
 
     const checkWin = () =>{
         const board = Gameboard.getBoard();
@@ -163,8 +163,11 @@ const Game = (function(){
     }
 
     const start = () =>{
+        player1Element.classList.remove("current")
+        player2Element.classList.remove("current")
         Gameboard.resetBoard();
         currentPlayer = player1;
+        player1Element.classList.add("current")
         round = 1;
         gameOver = false
         DisplayController.renderBoard();
