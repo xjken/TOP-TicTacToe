@@ -1,0 +1,30 @@
+body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    height: 100vh;
+}
+.header{
+    width: 606px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.header > * {
+    font-size: 2.5rem;
+}
+.gameboard-container{
+    border: 4px solid;
+    height: 606px;
+    width: 606px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+}
+.gameboard-container .cell{
+    height: 200px;
+    width: 200px;
+    border: 1px solid;
+}

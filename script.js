@@ -2,17 +2,11 @@
 const Gameboard = (function(){
     const board = new Array(9).fill(undefined);
 
-    const getBoard = () =>{
-        return board;
-    };
+    const getBoard = () =>{return board;};
 
-    const markCell = (mark, index) =>{
-        board[index] = mark;
-    };
+    const markCell = (mark, index) =>{board[index] = mark;};
 
-    const resetBoard = () =>{
-        board.fill(undefined);
-    };
+    const resetBoard = () =>{board.fill(undefined);};
 
     return{
         getBoard, 
@@ -26,17 +20,11 @@ const Player = (mark_temp) => {
     const mark = mark_temp;
     let winCount = 0;
 
-    const getMark = () =>{
-        return mark;
-    };
+    const getMark = () =>{return mark;};
 
-    const addWinCount = ()=>{
-        winCount+=1;
-    };
+    const addWinCount = ()=>{winCount+=1;};
 
-    const getWinCount = () =>{
-        return winCount;
-    };
+    const getWinCount = () =>{return winCount;};
 
     return{
         getMark, addWinCount, getWinCount
@@ -125,20 +113,20 @@ const Game = (function(){
                 };
             };
             
-            if(!hasWinner){
-                console.log(`It's a draw!`)
-            }
-
+            
             round++; 
             console.log(Gameboard.getBoard());
         };
+        if(!hasWinner){
+            console.log(`It's a draw!`)
+        }
     };
-
+    
     return {
         start, promptMove
     };
 })()
 
 
-Game.start();
+// Game.start();
 
